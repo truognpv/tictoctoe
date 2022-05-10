@@ -1,15 +1,22 @@
-import type { NextPage } from "next";
+import { createContext, useState } from "react";
 import "tailwindcss/tailwind.css";
-
+import { GameContextProvider } from "../components/GlobalContext";
 import Game from "../components/game";
 
 import styles from "../styles/Home.module.css";
 
-const Home: NextPage = () => {
+export const GameContext = createContext();
+const Home = () => {
+  const [previousStep, setPreviousStep] = useState(0);
   return (
-    <div className="">
+    <GameContext.Provider
+      value={{
+        previousStep,
+        setPreviousStep,
+      }}
+    >
       <Game />
-    </div>
+    </GameContext.Provider>
   );
 };
 

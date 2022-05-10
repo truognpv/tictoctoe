@@ -1,22 +1,37 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
+import { useContext } from "react";
 import { calculateWinner } from "../../helpers";
+import { GameContext } from "../pages";
 import Board from "./board";
 
 const Game = () => {
+  const game = useContext(GameContext);
   const [board, setBoard] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
   const winner = calculateWinner(board);
-  const handleClick = (index: any) => {
+
+  const handleClick = (index: number) => {
+    console.log(game);
+    game.setPreviousStep(index);
     const boardCopy = [...board];
     if (winner || boardCopy[index]) return;
     boardCopy[index] = xIsNext ? "X" : "O";
     setBoard(boardCopy);
     setXIsNext(!xIsNext);
   };
+
   const handleResetGame = () => {
     setBoard(Array(9).fill(null));
   };
-  const handleUndo = () => {};
+
+  const handleUndo = () => {
+    if (game.previousStep) {
+      const boardCopy = [...board];
+      boardCopy[game.previousStep] = null
+      setBoard(boardCopy);
+    }
+  };
 
   return (
     <div>
